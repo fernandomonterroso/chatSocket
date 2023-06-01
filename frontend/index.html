@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        <div class="jumbotron">
+            <h1 class="display-4">Enviar mensaje</h1>
+            <br>
+            <input id="nombre" class="form-control" placeholder="Nombre">
+            <br>
+            <textarea id="mensaje" class="form-control" placeholder="Su mensaje aquí">
+</textarea>
+            <br>
+            <button id="enviar" class="btn btn-success">Enviar</button>
+        </div>
+        <div id="mensajes">
+
+        </div>
+    </div>
+
+    <div id="estadoServidor">
+        Estado del servidor: <span id="estado" class="badge"></span>
+    </div>
+    <div id="estadoDestinatario">
+        Estado del destinatario: <span id="estadoDestinatarioBadge" class="badge"></span>
+    </div>
+
+    <div id="footerProgram"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
+        integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+        crossorigin="anonymous"></script>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://localhost:3000', {
+            query: {
+                userId: 'aquí_va_el_id_del_usuario' // Reemplaza esto con el ID de usuario correspondiente
+            }
+        });
+
+        socket.on('chat message', function (msg) {
+            $('#mensajes').append($('<li>').text(msg));
+        });
+
+        $('#enviar').click(function () {
+            let nombre = $("#nombre").val();
+            let mensaje = $("#mensaje").val();
+            let destinatario = $("#destinatario").val();
+            let mensajeCompleto = {
+                nombre: nombre,
+                mensaje: mensaje,
+                destinatario: destinatario
+            };
+            socket.emit('chat message', mensajeCompleto);
+            $("#mensaje").val("");
+            return false;
+        });
+
+        // Obtener el estado del servidor
+        socket.on('server status', function (status) {
+            console.log("hola",status);
+            var estadoServidor = $('#estado');
+            if (status) {
+                estadoServidor.text('En línea');
+                estadoServidor.addClass('badge badge-success');
+            } else {
+                estadoServidor.text('Desconectado');
+                estadoServidor.addClass('badge badge-danger');
+            }
+        });
+
+        // Obtener el estado del destinatario
+        socket.on('destinatario status', function (status) {
+            var estadoDestinatario = $('#estadoDestinatario');
+            if (status) {
+                estadoDestinatario.text('En línea');
+                estadoDestinatario.addClass('badge badge-success');
+            } else {
+                estadoDestinatario.text('Desconectado');
+                estadoDestinatario.addClass('badge badge-danger');
+            }
+        });
+    </script>
+
+
+    <script>
+
+    </script>
+
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'menu.html', true);
+        xhr.onreadystatechange = function () {
+            if (this.readyState !== 4) return;
+            if (this.status !== 200) return;
+            var menu = document.createElement('div');
+            menu.innerHTML = this.responseText;
+            document.body.insertBefore(menu, document.body.firstChild);
+        };
+        xhr.send();
+        var xhr2 = new XMLHttpRequest();
+        xhr2.open('GET', 'footer.html', true);
+        xhr2.onreadystatechange = function () {
+            if (this.readyState !== 4) return;
+            if (this.status !== 200) return;
+            var footer = document.getElementById('footerProgram');
+            footer.innerHTML = this.responseText;
+            //document.body.insertBefore(footer);
+        };
+        xhr2.send();
+    </script>
+
+</body>
+
+</html>

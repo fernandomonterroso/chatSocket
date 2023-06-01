@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div id="app" class="container py-3">
+        <div id="loading" class="loading loading--plane" title="Loading">
+            cargando...
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 113.5 104">
+                <path
+                    d="M97.7 41.5c16.3 0 16.3 21-.2 21H66.7l-26 38H29.2l14.1-38h-23l-7.8 10h-9L8.2 52 3.5 31.5h9l7.8 10h23.1l-14.1-38h11.4l26 38h31z"
+                    fill="none" stroke="#231F20" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-miterlimit="10" stroke="#000" stroke-width="4" />
+            </svg>
+        </div>
+        <h1 style="text-align: center;">Sistema de chats</h1>
+        <br>
+        <input type='checkbox' id='form-switch'>
+        <form v-on:submit.prevent="login" id='login-form' action="" method='post'>
+            <input id="username-login" type="text" placeholder="Username" required>
+            <input id="password-login" type="password" placeholder="Password" required>
+            <button type='submit'>Login</button>
+            <label for='form-switch'><span>Register</span></label>
+        </form>
+        <form v-on:submit.prevent="registrar" id='register-form' action="" method='post'>
+            <input type="text" placeholder="Nombre" id="Nombre" required>
+            <input type="text" placeholder="Apellido" id="Apellido" required>
+            <input id="username" type="text" placeholder="Username" required>
+            <input id="email" type="email" placeholder="Email" required>
+            <input id="password" type="password" placeholder="Password" required>
+            <input id="repassword" type="password" placeholder="Re Password" required>
+            <button type='submit'>Register</button>
+            <label for='form-switch'>Already Member ? Sign In Now..</label>
+        </form>
+
+    </div>
+</body>
+
+</html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.slim.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script src="scriptGenera.js"></script>
+<style>
+    /*ANIMACION LOADING*/
+    .loading {
+        z-index: 9999;
+        position: fixed;
+        top: calc(50% - 32px);
+        left: calc(50% - 32px);
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        perspective: 800px;
+    }
+
+    .loading--plane {
+        width: 70px;
+        stroke-dasharray: 425.59;
+        stroke-dashoffset: 425.59;
+        animation: plane-loading-animation 3s linear infinite;
+    }
+
+    @keyframes plane-loading-animation {
+        50% {
+            stroke-dashoffset: 425.59;
+        }
+
+        50% {
+            stroke-dashoffset: 0;
+        }
+
+        100% {
+            stroke-dashoffset: -425.59;
+        }
+    }
+
+    form {
+        margin: 0 auto;
+        width: 300px
+    }
+
+    input {
+        margin-bottom: 3px;
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #CCC
+    }
+
+    button {
+        padding: 10px
+    }
+
+    label {
+        cursor: pointer
+    }
+
+    #form-switch {
+        display: none
+    }
+
+    #register-form {
+        display: none
+    }
+
+    #form-switch:checked~#register-form {
+        display: block
+    }
+
+    #form-switch:checked~#login-form {
+        display: none
+    }
+</style>
